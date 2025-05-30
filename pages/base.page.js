@@ -85,8 +85,8 @@ class BasePage {
     }
 
     async getTabCount() {
-    const handles = await this.driver.getAllWindowHandles();
-    return handles.length;
+        const handles = await this.driver.getAllWindowHandles();
+        return handles.length;
     }
 }
 

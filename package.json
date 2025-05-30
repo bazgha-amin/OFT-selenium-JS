@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test/dataBlob.test.js --no-timeouts --reporter mochawesome --require mochawesome/register"
+    "test": "mocha test/*.test.js --no-timeouts --reporter mochawesome --require mochawesome/register"
   },
   "author": "Bazgha",
   "license": "ISC",

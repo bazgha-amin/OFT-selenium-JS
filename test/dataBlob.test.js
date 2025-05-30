@@ -21,30 +21,30 @@ describe('Data Blob Encoding and Membership Agreement Page Tests', function () {
 
     afterEach(async function () {
         if (this.currentTest?.state === 'failed') {
-          const screenshotPath = await driverManager.takeScreenshotOnFailure(this.currentTest);
-          if (screenshotPath) {
-            addContext(this, {
-              title: 'Screenshot on Failure',
-              value: `screenshots/${path.basename(screenshotPath)}`
-            });
-          }
+            const screenshotPath = await driverManager.takeScreenshotOnFailure(this.currentTest);
+            if (screenshotPath) {
+                addContext(this, {
+                    title: 'Screenshot on Failure',
+                    value: `screenshots/${path.basename(screenshotPath)}`
+                });
+            }
         }
-    
-        if (driverManager) {
-          await driverManager.closeBrowser();
-          await driverManager.quitDriver();
-        }
-      });
 
-    it('should decode the original datablob from the provided URL', async () => {
+        if (driverManager) {
+            await driverManager.closeBrowser();
+            await driverManager.quitDriver();
+        }
+    });
+
+    it('Should decode the original datablob from the provided URL', async () => {
         const url = "https://www.uat.orangetheory.com/en-us/membership-agreement?studioid=bf60d4c9-f9c3-4e5c-97f2-fe1118531493&data=ewogICJwZXJzb25faWQiOiAib3RmcWEzMTktYWE0OC00MmZhLTg4ODgtNTJmZjJlOTE0ZWEyMTk5IiwKICAibWVtYmVyX2VtYWlsIjogIm90ZnFhc0BvdXRsaWFudC5jb20iLAogICJtZW1iZXJfZmlyc3RfbmFtZSI6ICJPdXRsaWFudCIsCiAgIm1lbWJlcl9sYXN0X25hbWUiOiAiVGVzdGVyIiwKICAibWVtYmVyX3Bob25lX251bWJlciI6ICI0Mzc1NTUwMTIzIiwKICAic3R1ZGlvX2lkIjogImJmNjBkNGM5LWY5YzMtNGU1Yy05N2YyLWZlMTExODUzMTQ5MyIsCiAgIm1ib19zdHVkaW9faWQiOiAiNTcyOTY3OCIsCiAgIm1ib19jbGllbnRfaWQiOiAiOTg3NjUiLAogICJtYm9fY29udHJhY3RfaWQiOiAiMTIzNCIsCiAgIm1ib19jbGllbnRfY29udHJhY3RfaWQiOiAiMTIzNCIsCiAgIm1lbWJlcl9zdHJlZXRfYWRkcmVzcyI6ICIxMjMgTWFpbiBTdHJlZXQiLAogICJtZW1iZXJfY2l0eSI6ICJCb3N0b24iLAogICJtZW1iZXJfc3RhdGUiOiAiTUEiLAogICJtZW1iZXJfemlwIjogIjAyMTA4IiwKICAiY3JlZGl0X2NhcmRfbGFzdDQiOiAiMTIzNCIsCiAgImNyZWRpdF9jYXJkX3R5cGUiOiAiRElTQ09WRVIiLAogICJwcm9kdWN0X25hbWUiOiAiT25saW5lIEVsaXRlIEZhbWlseSBNZW1iZXJzaGlwIiwKICAicHJvZHVjdF90eXBlIjogIk1lbWJlcnNoaXAiLAogICJwcm9kdWN0X2NhdGVnb3J5IjogIkVsaXRlIiwKICAiaGFzX3Byb21vdGlvbiI6IHRydWUsCiAgImFkZF9vbiI6IHsKICAgICJ0eXBlIjogIkZBTUlMWSIsCiAgICAidmFsdWUiOiAiSm9obiBTdW1taXQiCn0sCiAgImNoZWNrX2lkIjp0cnVlLAogICJjb250cmFjdF9zdGFydF9kYXRlIjoiMjAzMi0wMi0yNVQwMDowMDowMCJ9";
         const decodedData = CommonUtils.decodeDataBlobFromUrl(url);
         assert.strictEqual(decodedData.member_first_name, 'Outliant', 'First Name is showing incorrect');
         assert.strictEqual(decodedData.member_last_name, 'Tester', 'Last name is showing incorrect');
-        assert.strictEqual(decodedData.member_email, 'otfqas@outliant.com','Email is showing incorrect');
+        assert.strictEqual(decodedData.member_email, 'otfqas@outliant.com', 'Email is showing incorrect');
     });
 
-    it('should generate a dynamic datablob, encode it, load the page, and verify displayed data', async () => {
+    it('Generate dynamic datablob, encode it, and validate network payload after page loads', async () => {
         const data = {
             person_id: "custom-id-1234",
             member_email: CommonUtils.getRandomEmail(5),

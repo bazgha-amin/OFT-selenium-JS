@@ -17,7 +17,7 @@ describe('Studio Page Tests', function () {
   beforeEach(async () => {
     driverManager = new DriverManager();
     driver = await driverManager.setupDriver();
-    studioPage = new StudioPage(driver); 
+    studioPage = new StudioPage(driver);
   });
 
   afterEach(async function () {
@@ -37,7 +37,7 @@ describe('Studio Page Tests', function () {
     }
   });
 
-  it.only('should navigate to Locations page and verify Studio info', async () => {
+  it('Should navigate to Locations page and select studio and verify studio info', async () => {
     await studioPage.goToLocationsPage();
     await studioPage.switchIframe('locationsIframe');
     const studioDetails = await studioPage.getStudioInfo();
@@ -48,13 +48,13 @@ describe('Studio Page Tests', function () {
     await studioPage.waitForElementVisible(studioPage.elements.studioNameAfter);
     const studioName = await studioPage.getText(studioPage.elements.studioNameAfter);
     assert.strictEqual(
-    studioName.trim(),
-    studioDetails[0].name.trim(),
-    'Studio name after booking should match the selected studio'
-  );
+      studioName.trim(),
+      studioDetails[0].name.trim(),
+      'Studio name after booking should match the selected studio'
+    );
   });
 
-  it.only('Form with empty data should display mandatory fields messages', async () => {
+  it('Submitting form with empty fields should give mandatory field error messages', async () => {
     await studioPage.goToLocationsPage();
     await studioPage.switchIframe('locationsIframe');
     const studioDetails = await studioPage.getStudioInfo();
@@ -63,17 +63,26 @@ describe('Studio Page Tests', function () {
     await studioPage.clickBookNow();
     await studioPage.waitForElementVisible(studioPage.elements.studioNameAfter);
     await studioPage.switchIframe('bookClassIframe');
-    // await studioPage.waitForElementVisible(studioPage.elements.introForm);
-    //await studioPage.scrollIntoView(studioPage.elements.nextBtn);
-    await driver.sleep(5000);
-    // await studioPage.clickElement(studioPage.elements.nextBtn);
-    await studioPage.clickNext();
-    expect(await studioPage.getErrorMessageText("firstName")).to.equal("Field is required");
-    expect(await studioPage.getErrorMessageText("lastName")).to.equal("Field is required");
-    expect(await studioPage.getErrorMessageText("email")).to.equal("Field is required");
+    let clicked = false;
+
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        const nextButton = await driver.wait(until.elementLocated(studioPage.elements.nextBtn), 10000);
+        await driver.executeScript("arguments[0].scrollIntoView(true);", nextButton);
+        await driver.executeScript("arguments[0].click();", nextButton);
+        clicked = true;
+        break;
+      } catch (err) {
+        console.warn(`Attempt ${attempt + 1} failed to click Next button. Retrying...`);
+        if (attempt === 1) throw err;
+      }
+    }
+    assert.strictEqual(await studioPage.getErrorMessageText("firstName"), "Field is required");
+    assert.strictEqual(await studioPage.getErrorMessageText("lastName"), "Field is required");
+    assert.strictEqual(await studioPage.getErrorMessageText("email"), "Field is required");
   });
 
-  it('clicking SMS & MMS link should open in a new tab', async () => {
+  it('Clicking the SMS & MMS Terms link should open a new browser tab', async () => {
     await studioPage.goToLocationsPage();
     await studioPage.switchIframe('locationsIframe');
     const studioDetails = await studioPage.getStudioInfo();

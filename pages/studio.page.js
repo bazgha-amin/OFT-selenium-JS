@@ -19,10 +19,7 @@ class StudioPage extends BasePage {
             bookClassIframe: By.id("book-class-1-frame"),
             introForm: By.xpath("//form[@data-testid='lead-form']"),
             smsMmsLink: By.xpath("//a[text()='SMS & MMS Terms of Service']"),
-            firstName: By.xpath("//input[@name='firstName']"),
-            lastName: By.xpath("//input[@name='lastName']"),
             email: By.xpath("//input[@name='email']"),
-            
         };
     }
 
@@ -34,16 +31,6 @@ class StudioPage extends BasePage {
         await this.clickElement(this.elements.bookNowBtn);
     }
 
-    async clickNext() {
-        await this.scrollIntoView(this.elements.nextBtn);
-        await this.driver.sleep(3000); 
-        let element = await this.driver.wait(until.elementLocated(this.elements.nextBtn), this.timeout);
-        await this.driver.wait(until.elementIsVisible(element), this.timeout);
-        await this.driver.wait(until.elementIsEnabled(element), this.timeout);
-        await this.driver.executeScript("arguments[0].scrollIntoView(true);", element);
-        await element.click();;
-    }
-
     async clickJoinNow() {
         await this.waitForClickableElement(this.elements.joinNowBtn);
         const buttons = await this.driver.findElements(this.elements.joinNowBtn);
@@ -53,7 +40,7 @@ class StudioPage extends BasePage {
                 await this.driver.wait(until.elementIsVisible(btn), 5000);
                 await this.driver.wait(until.elementIsEnabled(btn), 5000);
                 await btn.click();
-                break; 
+                break;
             }
         }
     }
@@ -63,7 +50,7 @@ class StudioPage extends BasePage {
         // Wait for iframe to be located and visible
         const iframe = await this.driver.wait(
             until.elementLocated(iframeLocator),
-            10000 
+            10000
         );
 
         await this.driver.wait(
@@ -109,7 +96,7 @@ class StudioPage extends BasePage {
     async getErrorMessageText(fieldName) {
         const formattedXpath = this.elements.errorMessage.replace("{0}", fieldName);
         const formattedLocator = By.xpath(formattedXpath);
-        await this.getText(formattedLocator);
+        return await this.getText(formattedLocator);
     }
 }
 

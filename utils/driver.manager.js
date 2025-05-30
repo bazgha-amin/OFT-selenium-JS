@@ -16,7 +16,7 @@ class DriverManager {
     }
 
     //Initialize WebDriver based on browser specified in .env
-     
+
     async initializeDriver() {
         try {
             const browser = configManager.getBrowser().toLowerCase();
@@ -46,9 +46,9 @@ class DriverManager {
             throw error;
         }
     }
-    
+
     //Get browser-specific options based on .env settings
-    
+
     getBrowserOptions(browser) {
         const isHeadless = process.env.HEADLESS === 'true';
 
@@ -87,9 +87,9 @@ class DriverManager {
                 throw new Error(`Unsupported browser: ${browser}`);
         }
     }
- 
+
     //Navigate to URL based on environment specified in .env
-     
+
     async navigateToBaseUrl() {
         try {
             if (!this.driver) {
@@ -114,9 +114,9 @@ class DriverManager {
             throw error;
         }
     }
-    
+
     //Take screenshot for failed case
-    
+
     async takeScreenshotOnFailure(testContext) {
         try {
             if (!this.driver) {
@@ -148,7 +148,7 @@ class DriverManager {
         }
     }
 
- 
+
     //Close current browser window
     async closeBrowser() {
         try {
@@ -161,7 +161,7 @@ class DriverManager {
         }
     }
 
-    
+
     //Quit driver and dispose all resources
     async quitDriver() {
         try {
@@ -175,7 +175,7 @@ class DriverManager {
         }
     }
 
-    
+
     //Browser Setup: Initialize driver and navigate to base URL
     async setupDriver() {
         await this.initializeDriver();
