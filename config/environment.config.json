@@ -1,0 +1,14 @@
+{
+  "QA": {
+    "url": "https://www.qa.orangetheory.com/en-us"
+  },
+  "SIT": {
+    "url": "https://www.sit.orangetheory.com/en-us"
+  },
+  "UAT": {
+    "url": "https://www.uat.orangetheory.com/en-us"
+  },
+  "PROD": {
+    "url": "https://www.orangetheory.com/en-us"
+  }
+}

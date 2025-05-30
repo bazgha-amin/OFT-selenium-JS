@@ -1,0 +1,32 @@
+{
+  "name": "outliant-seleniumjs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test/dataBlob.test.js --no-timeouts --reporter mochawesome --require mochawesome/register"
+  },
+  "author": "Bazgha",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "mochawesome": "^7.1.3",
+    "selenium-webdriver": "^4.33.0"
+  },
+  "devDependencies": {
+    "chai": "^5.2.0",
+    "geckodriver": "^5.0.0",
+    "mkdirp": "^3.0.1",
+    "mocha": "^11.5.0"
+  },
+  "mocha": {
+    "reporter": "mochawesome",
+    "reporter-options": {
+      "reportDir": "mochawesome-report",
+      "overwrite": true,
+      "html": true,
+      "json": true,
+      "inlineAssets": true
+    }
+  }
+}
