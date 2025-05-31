@@ -68,10 +68,10 @@ ENVIRONMENT=QA
 HEADLESS=true
 TIMEOUT=10000
 ```
-BROWSER: chrome, firefox
-ENVIRONMENT: must match a key in environment.config.json
-HEADLESS: true or false
-TIMEOUT: default wait time (in ms) for locating elements
+- `BROWSER`: chrome, firefox  
+- `ENVIRONMENT`: must match a key in `environment.config.json`  
+- `HEADLESS`: true or false  
+- `TIMEOUT`: default wait time (in ms) for locating elements  
 
 ---
 
