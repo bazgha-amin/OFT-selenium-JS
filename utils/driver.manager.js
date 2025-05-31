@@ -8,11 +8,24 @@ const fs = require('fs');
 const path = require('path');
 const mkdirp = require('mkdirp');
 const { Browser } = require("selenium-webdriver");
-
+const Logger = require('../utils/logger.util');
 
 class DriverManager {
+    static _instance;
     constructor() {
+        if (DriverManager._instance) {
+            return DriverManager._instance;
+        }
         this.driver = null;
+        this.timeout = parseInt(process.env.TIMEOUT) || 10000;
+        DriverManager._instance = this;
+    }
+
+    static getInstance() {
+        if (!DriverManager._instance) {
+            DriverManager._instance = new DriverManager();
+        }
+        return DriverManager._instance;
     }
 
     //Initialize WebDriver based on browser specified in .env
@@ -20,7 +33,7 @@ class DriverManager {
     async initializeDriver() {
         try {
             const browser = configManager.getBrowser().toLowerCase();
-            console.log(`Initializing ${browser} browser...`);
+            Logger.info(`Initializing ${browser} browser...`);
 
             const options = this.getBrowserOptions(browser);
             const builder = new Builder().forBrowser(browser);
@@ -38,11 +51,11 @@ class DriverManager {
             await this.driver.manage().setTimeouts({ implicit: 10000 });
             await this.driver.manage().window().maximize();
 
-            console.log(`${browser} browser initialized successfully`);
+            Logger.info(`${browser} browser initialized successfully`);
             return this.driver;
 
         } catch (error) {
-            console.error('Failed to initialize driver:', error);
+            Logger.error('Failed to initialize driver:', error);
             throw error;
         }
     }
@@ -99,7 +112,7 @@ class DriverManager {
             const baseUrl = configManager.getBaseUrl();
             const environment = configManager.getEnvironment();
 
-            console.log(`Navigating to ${environment} environment: ${baseUrl}`);
+            Logger.info(`Navigating to ${environment} environment: ${baseUrl}`);
             await this.driver.get(baseUrl);
 
             await this.driver.wait(async () => {
@@ -107,10 +120,10 @@ class DriverManager {
                 return title && title.length > 0;
             }, this.timeout);
 
-            console.log(`Successfully navigated to: ${baseUrl}`);
+            Logger.info(`Successfully navigated to: ${baseUrl}`);
 
         } catch (error) {
-            console.error('Failed to navigate to base URL:', error);
+            Logger.error('Failed to navigate to base URL:', error);
             throw error;
         }
     }
@@ -120,7 +133,7 @@ class DriverManager {
     async takeScreenshotOnFailure(testContext) {
         try {
             if (!this.driver) {
-                console.log('Driver not available for screenshot');
+                Logger.info('Driver not available for screenshot');
                 return;
             }
 
@@ -140,11 +153,11 @@ class DriverManager {
             const screenshot = await this.driver.takeScreenshot();
             fs.writeFileSync(filePath, screenshot, 'base64');
 
-            console.log(`Failure screenshot saved: ${filePath}`);
+            Logger.error(`Failure screenshot saved: ${filePath}`);
             return filePath;
 
         } catch (error) {
-            console.error('Failed to take failure screenshot:', error);
+            Logger.error('Failed to take failure screenshot:', error);
         }
     }
 
@@ -154,10 +167,10 @@ class DriverManager {
         try {
             if (this.driver) {
                 await this.driver.close();
-                console.log('Browser window closed');
+                Logger.info('Browser window closed');
             }
         } catch (error) {
-            console.error('Failed to close browser:', error);
+            Logger.error('Failed to close browser:', error);
         }
     }
 
@@ -168,10 +181,10 @@ class DriverManager {
             if (this.driver) {
                 await this.driver.quit();
                 this.driver = null;
-                console.log('Driver disposed successfully');
+                Logger.info('Driver disposed successfully');
             }
         } catch (error) {
-            console.error('Failed to quit driver:', error);
+            Logger.error('Failed to quit driver:', error);
         }
     }
 

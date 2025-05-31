@@ -6,16 +6,17 @@ const assert = require('assert');
 const { expect } = require('chai');
 const addContext = require("mochawesome/addContext");
 const path = require('path');
+const Logger = require('../utils/logger.util');
 
 describe('Studio Page Tests', function () {
-  this.timeout(50000);
+  this.timeout(60000);
 
   let driverManager;
   let driver;
   let studioPage;
 
   beforeEach(async () => {
-    driverManager = new DriverManager();
+    driverManager = DriverManager.getInstance();
     driver = await driverManager.setupDriver();
     studioPage = new StudioPage(driver);
   });
@@ -73,7 +74,7 @@ describe('Studio Page Tests', function () {
         clicked = true;
         break;
       } catch (err) {
-        console.warn(`Attempt ${attempt + 1} failed to click Next button. Retrying...`);
+        Logger.info(`Attempt ${attempt + 1} failed to click Next button. Retrying...`);
         if (attempt === 1) throw err;
       }
     }

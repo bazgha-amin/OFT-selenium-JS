@@ -7,6 +7,7 @@ const { expect } = require('chai');
 const chrome = require('selenium-webdriver/chrome');
 const addContext = require("mochawesome/addContext");
 const path = require('path');
+const Logger = require('../utils/logger.util');
 
 describe('Data Blob Encoding and Membership Agreement Page Tests', function () {
     this.timeout(60000);
@@ -15,7 +16,7 @@ describe('Data Blob Encoding and Membership Agreement Page Tests', function () {
     let driver;
 
     beforeEach(async () => {
-        driverManager = new DriverManager();
+        driverManager = DriverManager.getInstance();
         driver = await driverManager.setupDriver();
     });
 
@@ -94,12 +95,12 @@ describe('Data Blob Encoding and Membership Agreement Page Tests', function () {
                     message.params.request.postData
                 ) {
                     validatePayload = JSON.parse(message.params.request.postData);
-                    console.log('Captured /validate POST payload:', validatePayload);
-                    console.log('validatePayload:', JSON.stringify(validatePayload, null, 2));
+                    Logger.info('Captured /validate POST payload:', validatePayload);('Captured /validate POST payload:', validatePayload);
+                    Logger.info('validatePayload:', JSON.stringify(validatePayload, null, 2));
                     break;
                 }
             } catch (err) {
-                console.error('Error parsing performance log:', err);
+                Logger.error('Error parsing performance log:', err);
             }
         }
 

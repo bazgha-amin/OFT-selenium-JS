@@ -1,4 +1,5 @@
 const { By, until, Key } = require('selenium-webdriver');
+const Logger = require('../utils/logger.util');
 
 class BasePage {
     constructor(driver) {
@@ -43,22 +44,27 @@ class BasePage {
 
     async waitForElement(locator) {
         try {
+            Logger.info(`Waiting for element: ${locator}`);
             return await this.driver.wait(until.elementLocated(locator), this.timeout);
         } catch (error) {
+            Logger.error(`Element '${locator}' not found within ${this.timeout}ms`);
             throw new Error(`Element '${locator}' not found within ${this.timeout}ms`);
         }
     }
 
     async waitForClickableElement(locator) {
+        Logger.info(`Waiting for element to be clickable: ${locator}`);
         const element = await this.waitForElement(locator);
         return await this.driver.wait(until.elementIsEnabled(element), this.timeout);
     }
 
     async waitForElementVisible(locator) {
         try {
+            Logger.info(`Waiting for element to be visible: ${locator}`);
             const element = await this.driver.wait(until.elementLocated(locator), this.timeout);
             await this.driver.wait(until.elementIsVisible(element), this.timeout);
         } catch (error) {
+            Logger.error(`Element '${locator}' not found within ${this.timeout}ms`);
             throw new Error(`Element '${locator}' not visible within ${this.timeout}ms`);
         }
     }

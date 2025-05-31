@@ -15,7 +15,7 @@ This is a Selenium-based test automation framework built using **JavaScript**, d
 - **Language**: JavaScript (Node.js)  
 - **Test Runner**: Mocha  
 - **Assertion Library**: Chai  
-- **Design Pattern**: Page Object Model (POM)  
+- **Runtime environment configuration**: Dotenv
 - **Reporting**: Mochawesome
 
 
@@ -39,7 +39,14 @@ Project Structure
 ├── package.json                     # Project metadata and dependencies
 └── mochawesome-report/              # Directory for generated test reports
 ```
+## Design Patterns & Best Practices
 
+- ✅ **Singleton Pattern** for WebDriver: Ensures only one driver instance is used throughout the test suite.
+- ✅ **Page Object Model (POM)**: Promotes code reusability and maintainability.
+- ✅ **Centralized Logging**: All test logs go through a custom `Logger` utility (`logger.util.js`) for standardized output.
+- ✅ **Configurable Timeout**: WebDriver's wait timeout is defined via `.env` for flexibility across environments (local, CI, etc.).
+
+---
 
 ## **⚙️ Setup Instructions**
 
@@ -52,6 +59,21 @@ git clone https://github.com/bazgha-amin/OFT-selenium-JS.git
 ```bash
 npm install
 ```
+
+### **3️⃣ Configure Environment Variables**
+Create a .env file in the root directory (if not present) and set your configuration:
+```bash
+BROWSER=chrome
+ENVIRONMENT=QA
+HEADLESS=true
+TIMEOUT=10000
+```
+BROWSER: chrome, firefox
+ENVIRONMENT: must match a key in environment.config.json
+HEADLESS: true or false
+TIMEOUT: default wait time (in ms) for locating elements
+
+---
 
 ## **▶️ Run Tests**
 
@@ -79,5 +101,13 @@ This report includes:
 
 ---
 
+## **📊 Logging Example**
+
+The framework uses logger.util.js for consistent log output:
+
+```bash
+[INFO] 2025-05-31T08:00:00.000Z - Initializing chrome browser...
+[ERROR] 2025-05-31T08:01:10.000Z - Failed to locate element: studioName
+```
 
 
